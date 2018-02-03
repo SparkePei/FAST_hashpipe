@@ -1,0 +1,6 @@
+#g++ -Wno-unused-result -g -O3  -fPIC -shared -msse4 -I. -I/include -I/usr/local/include -L. -L/usr/local/lib -lhashpipe -lrt -lm -c filterbank.cpp
+
+g++ -g -O3  -fPIC -shared -msse4 -I. -I/include -I/usr/local/include -L. -L/usr/local/lib -lhashpipe -lrt -lm -c filterbank.cpp
+
+g++ -g -O3  -fPIC -shared -msse4 -I. -I/include -I/usr/local/include -L. -L/usr/local/lib -lhashpipe -lrt -lm FAST_gpu_thread.c FAST_output_thread.c FAST_databuf.c FAST_net_thread.c  filterbank.o -o FAST_hashpipe.so
+
