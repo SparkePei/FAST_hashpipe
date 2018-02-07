@@ -808,7 +808,8 @@ void FilterBankData::ZeroDM(const string method)
                                +(double)(currenttime.tv_usec/86400.0/1000000.0)
                                -(double)2400000.5;
 	FilterBankData fil;
-	strcpy(fil.Source_name, "B0329+54");
+	//strcpy(fil.Source_name, "B0329+54");
+	strcpy(fil.Source_name, SOURCE_NAME);
 	fil.UseFrequencyTable=false;
 	fil.Telescope_id=0;
 	fil.Machine_id=0;
@@ -818,13 +819,20 @@ void FilterBankData::ZeroDM(const string method)
 	fil.Src_dej=0;
 	fil.Src_raj=0;
 	fil.Tstart=net_MJD;
-	fil.Tsamp=Tsamp;
-	fil.Fch1=Fch1;
-	fil.Foff=Foff;
-	fil.Nchans=Nchans;
-	fil.Nbits=Nbits;
+	//fil.Tsamp=Tsamp;
+	//fil.Fch1=Fch1;
+	//fil.Foff=Foff;
+	//fil.Nchans=Nchans;
+	//fil.Nbits=Nbits;
+	//fil.Nbeams=N_BEAM;
+	//fil.Nifs=Nifs;
+	fil.Tsamp=T_SAMP;
+	fil.Fch1=F_CH1;
+	fil.Foff=F_OFF;
+	fil.Nchans=N_CHANS_SPEC;
+	fil.Nbits=N_BITS_DATA_POINT;
 	fil.Nbeams=N_BEAM;
-	fil.Nifs=Nifs;
+	fil.Nifs=N_IFS;
 	fil.RefDM=0;
 	//fil.Nsamples=Nsl/Nchans/Nifs;
 	//fil.pData=(float *)pd_proc;

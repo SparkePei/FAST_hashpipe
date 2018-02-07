@@ -6,6 +6,7 @@
 //#include <string>
 #include <iostream>
 #include <string.h>
+
 using namespace std;
 /**\brief the class to store the time series. 
 \param ptim the pointer to the data
@@ -15,6 +16,13 @@ using namespace std;
 \param plink the pointer to a array of the TimeSeires. This is used to store the reuslts of box-cart filter
  */
 //FILE * f_fil;
+#define SOURCE_NAME "frb_20180501"
+#define T_SAMP 	256e-6 //(s ) 
+#define F_CH1 	1799.9375
+#define F_OFF	-0.125
+//#define N_CHANS	N_CHANS_SPEC
+//#define N_BITS	N_BITS_DATA_POINT
+#define N_IFS	1 //N_POLS_PKT
 #ifndef __FilterBankData_H__
 #define __FilterBankData_H__
 #ifdef __cplusplus
