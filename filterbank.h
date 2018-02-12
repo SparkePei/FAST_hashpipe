@@ -174,7 +174,9 @@ private:
 	bool readdata(long int ns);
 	FILE * fp;
 };
+
 extern double current_MJD;
+extern int beam_ID;
 
 void WriteHeader(const char * fname, double net_MJD);
 

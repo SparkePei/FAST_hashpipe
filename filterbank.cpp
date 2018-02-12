@@ -17,6 +17,9 @@
 #include <FAST_databuf.h>
 
 #define _CHAR_SWAP_SIZE 256
+
+//extern int beam_ID;
+
 TimeSeries::TimeSeries(void)
 {
 	ptim=NULL;
@@ -832,6 +835,7 @@ void FilterBankData::ZeroDM(const string method)
 	fil.Nchans=N_CHANS_SPEC;
 	fil.Nbits=N_BITS_DATA_POINT;
 	fil.Nbeams=N_BEAM;
+	fil.Ibeam=beam_ID;
 	fil.Nifs=N_IFS;
 	fil.RefDM=0;
 	//fil.Nsamples=Nsl/Nchans/Nifs;
