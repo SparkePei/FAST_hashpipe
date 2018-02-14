@@ -1,7 +1,10 @@
 # FAST_Pipeline_Hashpipe
 * Introduction
-    This  code is used to receive the packets from high speed ethernet, calculate the Stokes parameters and save the data to disc in filterbank format.
+    
+This  code is used to receive the packets from high speed ethernet, calculate the Stokes parameters and save the data to disc in filterbank format.
+
     The data will be stored in a temporary place which mounted on CPU RAM. A FRB real time search software known as Heimdall will look for the new *.fil file in a given directory, once Heimdall found insterested signals the Filterbank files will be moved to disk, otherwise remove these raw data.
+
     Three threads have developed to perform packet receiving, Stokes calculation and Filterbank data formatting, which are:
     * FAST_net_thread; (packet receving)
     * FAST_gpu_thread; (Stokes calculation,"gpu" is just a tradition name, no GPU used in here.)
