@@ -1,30 +1,42 @@
 # FAST_Pipeline_Hashpipe
-This is thread manage pipeline for FAST FRB backend. 
-The data are store in a Ram for temporary storage. When found a candidate, the data will be store into Disk.
-This part include the former packet receiving, dissambling, and Filterbank data formate convertion. It has 3 threads:
-  FAST_net_thread; (Packet receving)
-  FAST_gpu_thread; ("gpu" is just a tradition to use, it has no GPU at all! Charge for stocks parameter re-assemble)
-  FAST_output_thread; (Output data into RAM)
- 
-There are 2 buffers between three threads, each of them is a 3 segment ring buffer. Buffer status could be abstracted from each ring buffer.
+* Introduction
+This  code is used to receive the packets from high speed ethernet, calculate the Stokes parameters and save the data to disc in filterbank format.
+    The data will be stored in a temporary place which mounted on CPU RAM. A FRB real time search software known as Heimdall will look for the new *.fil file in a given directory, once Heimdall found insterested signals the Filterbank files will be moved to disk, otherwise remove these raw data.
+    Three threads have developed to perform packet receiving, Stokes calculation and Filterbank data formatting, which are:
+    * FAST_net_thread; (packet receving)
+    * FAST_gpu_thread; (Stokes calculation,"gpu" is just a tradition name, no GPU used in here.)
+    * FAST_output_thread; (Filterbank data saving)
 
-Required:
-  Hashpipe
-  Ruby 2.1.2
-  Install information: See:
-  https://github.com/peterniuzai/Work_memo/blob/master/hashpipe_install.pdf
+    There are 2 buffers between three threads, each of them has a 3 segments ring buffer.  Buffer status could be abstracted from each ring buffer. There is a demo about how does Hashpipe working you can find [in here](https://github.com/SparkePei/demo1_hashpipe).
 
-Make file  
-  This pipeline including c for hashpipe and c++ for filterbank data formate convert(Written by K.J.Li).
-  ./make_cmd  
-  sudo make install
-  
-Hashpiepe has a monitor to waitch the system. 
-  It is wrriten in Ruby, we could find the hashpipe monitor from 
-  https://github.com/david-macmahon/rb-hashpipe.git
-  
-  After install hashpipe, if you want to run the monitor, you can put hashpipe_status_monitor.rb in terminal.
-  
-
-# FAST_hashpipe
-# FAST_hashpipe
+* Installation
+    * Required packages as follows:
+    ```
+    Hashpipe 1.5
+    Ruby 2.1.10
+    rb-hashpipe 1.5
+    ```
+    [Here](https://github.com/SparkePei/demo1_hashpipe) is the tutorial to install these packages.
+    * once these required packages installed properly, you can download this software from github:
+    ```
+    git clone https://github.com/SparkePei/FAST_hashpipe.git
+    ```
+    * enter this directory and run:
+    ```
+    make
+    sudo make install
+    ```
+* How to run this software
+    * You can easily tap following command to start at your installation directory:
+    ```
+    ./FAST_init.sh
+    ```
+    Inside this shell script, only one command line will be executed see follows:
+    ```
+    hashpipe -p FAST_hashpipe -I 0 -o BINDHOST="10.10.12.2" -c 1 FAST_net_thread -c 2 FAST_gpu_thread -c 3 FAST_output_thread
+    ```
+    In here, "FAST_hashpipe" as plugin was launched by hashpipe software and created an instance of "-I 0". "-o BINDHOST="10.10.12.2" is used to bind the host with a given IP address. "-c 1 FAST_net_thread" is used to assign the CPU 1 for FAST_net_thread, and so on.
+    * To check the run time status of this software, you can run following command:
+    ```
+    hashpipe_status_monitor.rb
+    ```
