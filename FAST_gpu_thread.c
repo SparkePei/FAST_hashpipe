@@ -58,14 +58,26 @@ polar_data_t  polarization_process(FAST_input_databuf_t *db_in)
     polar_data_t data;
 
     if (data_type == 0)
-    {	
-       for(int i=0;i<N_SPEC_BUFF;i++)
+    {
+	/*uint16_t uint16_test = 121;
+	uint8_t uint8_test = (uint16_t)uint16_test;
+	printf("uint8_test is : %d\n",uint8_test);
+	*/	
+       for(int i=0;i<N_SPEC_BUFF/N_POST_VACC;i++)
+       //for(int i=0;i<N_SPEC_BUFF;i++)
           {
         	for(int j=0;j<N_CHANS_SPEC;j++)
-        	{
-           		data.Polar1[i*N_CHANS_SPEC+j]  = 
-        		db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT]
-        		+db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT+1];
+		{	
+			uint16_t post_vacc_tmp=0;
+			for(int k=0;k<N_POST_VACC;k++)
+			{
+           			post_vacc_tmp  += 
+        		(db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT*N_POST_VACC+k*N_POLS_PKT]
+        		+db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT*N_POST_VACC+k*N_POLS_PKT+1]);
+			//printf("data.Polar1[%d] equal db_in->block[block_in].data[%d]+db_in->block[block_in].data[%d]/%d/%d\n",i*N_CHANS_SPEC+j,((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT*N_POST_VACC+k*N_POLS_PKT,((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT*N_POST_VACC+k*N_POLS_PKT+1,N_POLS_PKT,N_POST_VACC);
+			}
+			data.Polar1[i*N_CHANS_SPEC+j] = (uint8_t)(post_vacc_tmp/N_POLS_PKT/N_POST_VACC);	
+			//data.Polar1[i*N_CHANS_SPEC+j] = (uint8_t)((db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT]+db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT+1])/N_POLS_PKT);	
         	}
         }
     }

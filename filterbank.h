@@ -17,7 +17,7 @@ using namespace std;
  */
 //FILE * f_fil;
 #define SOURCE_NAME "frb_20180501"
-#define T_SAMP 	256e-6 //(s ) 
+//#define T_SAMP 	256e-6 //(s ) 
 #define F_CH1 	1799.9375
 #define F_OFF	-0.125
 //#define N_CHANS	N_CHANS_SPEC

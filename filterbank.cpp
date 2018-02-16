@@ -829,7 +829,7 @@ void FilterBankData::ZeroDM(const string method)
 	//fil.Nbits=Nbits;
 	//fil.Nbeams=N_BEAM;
 	//fil.Nifs=Nifs;
-	fil.Tsamp=T_SAMP;
+	fil.Tsamp=SAMP_TIME*N_POST_VACC;
 	fil.Fch1=F_CH1;
 	fil.Foff=F_OFF;
 	fil.Nchans=N_CHANS_SPEC;

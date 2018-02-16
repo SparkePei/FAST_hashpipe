@@ -11,13 +11,13 @@
 #define TEST			0
 
 #define N_BEAM			19
-
+#define N_POST_VACC		4			//number of post vaccumulation, how many spectrums added together
 #define N_CHAN_PER_PACK		2048			//Number of channels per packet
 #define N_PACKETS_PER_SPEC	2			//Number of packets per spectrum
 #define N_BYTES_DATA_POINT	1			//Number of bytes per datapoint
 #define N_POLS_PKT		2			//Number of polarizations per packet
 #define N_BYTES_HEADER		8			//Number of Bytes of header
-#define N_SPEC_BUFF             512			//Number of spectrums per buffer
+#define N_SPEC_BUFF             512*N_POST_VACC		//Number of spectrums per buffer
 #define N_BITS_DATA_POINT       N_BYTES_DATA_POINT*8 	//Number of bits per datapoint in packet
 #define N_CHANS_SPEC		(N_CHAN_PER_PACK * N_PACKETS_PER_SPEC) 					//Channels in spectrum for 1 pole.
 #define DATA_SIZE_PACK		(unsigned long)(N_CHAN_PER_PACK * N_POLS_PKT *  N_BYTES_DATA_POINT) 	//Packet size without Header 
@@ -28,7 +28,9 @@
 //#define N_SPEC_PER_FILE		1199616/4 			// Number of spectrums per file \
 				int{time(s)/T_samp(s)/N_SPEC_BUFF}*N_SPEC_BUFF  e.g. 20s data: int(20/0.001/128)*128
 //#define N_BYTES_PER_FILE	(N_SPEC_PER_FILE * N_BYTES_PER_SPEC / N_POLS_PKT) 			// we can save (I,Q,U,V) polaration into disk. 
-#define N_BYTES_PER_FILE	20/256e-6*N_CHANS_SPEC 			// we can save (I,Q,U,V) polaration into disk. 
+#define SAMP_TIME		256e-6			// sec
+#define FIL_LEN			20			// sec
+#define N_BYTES_PER_FILE	FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC 			// we can save (I,Q,U,V) polaration into disk. 
 
 
 
@@ -40,7 +42,7 @@ typedef uint8_t hashpipe_databuf_cache_alignment[
 //Define Stocks Parameter I.Q.U.V. Data structure
 typedef struct polar_data {
 
-   uint8_t Polar1[N_CHANS_BUFF];
+   uint8_t Polar1[N_CHANS_BUFF/N_POST_VACC];
 //   uint8_t Polar2[N_CHANS_BUFF];
 
 }polar_data_t;
