@@ -30,7 +30,8 @@ static void *run(hashpipe_thread_args_t * args)
 	FAST_output_databuf_t *db = (FAST_output_databuf_t *)args->ibuf;
 	hashpipe_status_t st = args->st;
 	const char * status_key = args->thread_desc->skey;
-	int rv, N_files;
+	int rv;
+	int N_files=0;
 	int block_idx = 0;
 	uint64_t N_Bytes_save = 0;
 	uint64_t N_Bytes_file = N_BYTES_PER_FILE;
