@@ -127,6 +127,8 @@ static void *run(hashpipe_thread_args_t * args)
                         char Filname_P1[250]={""};
                         //char Filname_P2[250]={""};
                         strncpy(Filname_P1, f_fil_P1, strlen(f_fil_P1)-8);
+			fclose(FAST_file_Polar_1);
+			//fclose(FAST_file_Polar_2);
                         //strncpy(Filname_P2, f_fil_P2, strlen(f_fil_P2)-8);
                         rename(f_fil_P1,Filname_P1);
                         //rename(f_fil_P2,Filname_P2);
@@ -145,8 +147,6 @@ static void *run(hashpipe_thread_args_t * args)
 		pthread_testcancel();
 
 	}
-	fclose(FAST_file_Polar_1);
-	//fclose(FAST_file_Polar_2);
 	return THREAD_OK;
 }
 

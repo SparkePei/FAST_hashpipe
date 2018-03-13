@@ -11,13 +11,13 @@
 #define TEST			0
 
 #define N_BEAM			19
-#define N_POST_VACC		4			//number of post vaccumulation, how many spectrums added together
+#define N_POST_VACC		1			//number of post vaccumulation, how many spectrums added together
 #define N_CHAN_PER_PACK		2048			//Number of channels per packet
 #define N_PACKETS_PER_SPEC	2			//Number of packets per spectrum
 #define N_BYTES_DATA_POINT	1			//Number of bytes per datapoint
 #define N_POLS_PKT		2			//Number of polarizations per packet
 #define N_BYTES_HEADER		8			//Number of Bytes of header
-#define N_SPEC_BUFF             (512*N_POST_VACC)		//Number of spectrums per buffer
+#define N_SPEC_BUFF             (2*512*N_POST_VACC)		//Number of spectrums per buffer
 #define N_BITS_DATA_POINT       (N_BYTES_DATA_POINT*8) 	//Number of bits per datapoint in packet
 #define N_CHANS_SPEC		(N_CHAN_PER_PACK * N_PACKETS_PER_SPEC) 					//Channels in spectrum for 1 pole.
 #define DATA_SIZE_PACK		(unsigned long)(N_CHAN_PER_PACK * N_POLS_PKT *  N_BYTES_DATA_POINT) 	//Packet size without Header 

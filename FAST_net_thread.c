@@ -17,6 +17,8 @@
 #include <unistd.h>
 #include "hashpipe.h"
 #include "FAST_databuf.h"
+#include <hiredis/hiredis.h>
+
 //#include "FAST_net_thread.h"
 //defining a struct of type hashpipe_udp_params as defined in hashpipe_udp.h
 //unsigned long long miss_pkt = 0;
@@ -211,7 +213,7 @@ static inline void process_packet(FAST_input_databuf_t *db,char *packet)
     seq =  pkt_mcnt % N_PACKETS_PER_SPEC;
     start_file  = 1;
     // Copy Header Information
-    beam_ID   = pkt_beamID;
+    beam_ID   = pkt_beamID+1; // beam number start from 1
 
     if(TEST){
 	    fprintf(stderr,"**Before start**\n");
@@ -225,6 +227,7 @@ static inline void process_packet(FAST_input_databuf_t *db,char *packet)
 	if(TEST){printf("\n ********start !!!******\n\n");}
         if (total_packets_counted == 0 ){ 
 		binfo.cur_mcnt = pkt_mcnt;
+		printf("set two mcnt are the same to start.\n");
 	}
 
         total_packets_counted++;
@@ -293,19 +296,31 @@ if(TEST){printf("\n ********End !!!******\n\n");}
 
 static void *run(hashpipe_thread_args_t * args)
 {
+	total_packets_counted == 0;
 	double Year, Month, Day;
 	double jd;
 	//double net_MJD;
 	time_t timep;
 	struct tm *p_t;
 	struct timeval currenttime;
+    redisContext *redis_c;
+    redisReply *reply;
+    const char *hostname = "asa2";
+    int redis_port = 6379;
+
+    struct timeval timeout = { 1, 500000 }; // 1.5 seconds
+    redis_c = redisConnectWithTimeout(hostname, redis_port, timeout);
+    if (redis_c == NULL || redis_c->err) {
+        if (redis_c) {
+            printf("Connection error: %s\n", redis_c->errstr);
+            redisFree(redis_c);
+        } else {
+            printf("Connection error: can't allocate redis context\n");
+        }
+        exit(1);
+    }
 
     FAST_input_databuf_t *db  = (FAST_input_databuf_t *)args->obuf;
-    if(!binfo.initialized) {
-        initialize_block_info(&binfo);
-        db->block[binfo.block_idx].header.netmcnt=0;
-	printf("\nInitailized!\n");
-    }
 
     hashpipe_status_t st = args->st;
     status_key = args->thread_desc->skey;
@@ -337,10 +352,23 @@ static void *run(hashpipe_thread_args_t * args)
 
     //struct hashpipe_udp_packet p;
 
+    if(!binfo.initialized) {
+        initialize_block_info(&binfo);
+        db->block[binfo.block_idx].header.netmcnt=0;
+	printf("\nInitailized!\n");
+    }
     /* Give all the threads a chance to start before opening network socket */
     sleep(2);
 
 
+    	/* Get receiving flag from redis server */
+	printf("waiting for set start_flag to 1 on server to start ...\n");
+	do {
+    	reply = (redisReply *)redisCommand(redis_c,"GET start_flag");
+	sleep(0.1);
+	} while(strcmp(reply->str,"1")!=0); // if start_flag set to 1 then start data receiving.
+    	printf("GET value from %s and start_flag is: %s, start data receiving...\n", hostname, reply->str);
+    	freeReplyObject(reply);
 
     /* Set up UDP socket */
     int rv = hashpipe_udp_init(&up);
@@ -392,7 +420,8 @@ static void *run(hashpipe_thread_args_t * args)
                                +(double)(p_t->tm_sec/86400.0)
                                +(double)(currenttime.tv_usec/86400.0/1000000.0)
                                 -(double)2400000.5;
-        printf("net_MJD time of packets is %lf",net_MJD);
+        printf("net_MJD time of packets is %lf\n",net_MJD);
+
 
     /* Main loop */
 
@@ -404,7 +433,6 @@ static void *run(hashpipe_thread_args_t * args)
         hashpipe_status_unlock_safe(&st);
 
 //	pkt_size = recv(up.sock, p.data, HASHPIPE_MAX_PACKET_SIZE, 0);
-
 	pkt_size = recvfrom(up.sock,packet,PKTSIZE*sizeof(char),0,NULL,NULL);	
 
 	if(!run_threads()) {break;}

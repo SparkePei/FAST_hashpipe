@@ -5,7 +5,7 @@ CC          = g++
 CCFLAGS     = -g -O3 -fPIC -shared -lstdc++ -mavx -msse4 \
                      -I. -I$(CUDA_DIR)/include -I/usr/local/include \
                      -L. -L/usr/local/lib \
-                     -lhashpipe -lrt -lm
+                     -lhashpipe -lrt -lm -lhiredis
 
 FILTERBANK_OBJECT   = filterbank.o
 FILTERBANK_SOURCES  = filterbank.cpp
