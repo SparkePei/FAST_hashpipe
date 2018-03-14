@@ -66,25 +66,31 @@ polar_data_t  polarization_process(FAST_input_databuf_t *db_in)
        for(int i=0;i<N_SPEC_BUFF/N_POST_VACC;i++)
        //for(int i=0;i<N_SPEC_BUFF;i++)
           {
-        	for(int j=0;j<N_CHANS_SPEC;j++)
+        	for(int j=0;j<N_POST_CHANS_SPEC;j++)
 		{	
 			uint16_t post_vacc_tmp=0;
+			// processing post vacc, add multiple spectrum togeter
 			for(int k=0;k<N_POST_VACC;k++)
 			{
+				// processing post channelization, merge multiple channels to one
+				for(int l=0;l<N_POST_CHANS_COMB;l++)
+				{
            			post_vacc_tmp  += 
-        		//(db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT*N_POST_VACC+k*N_POLS_PKT]
-        		//+db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT*N_POST_VACC+k*N_POLS_PKT+1]);
-        		(db_in->block[block_in].data[i*N_CHANS_SPEC*N_POLS_PKT*N_POST_VACC+((k+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT]
-        		+db_in->block[block_in].data[i*N_CHANS_SPEC*N_POLS_PKT*N_POST_VACC+((k+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT+1]);
-			/*if(i==0 | i==1){
-			printf("data.Polar1[%d] equal db_in->block[block_in].data[%d]+db_in->block[block_in].data[%d]/%d/%d\n",i*N_CHANS_SPEC+j,
-i*N_CHANS_SPEC*N_POLS_PKT*N_POST_VACC+((k+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT,
-i*N_CHANS_SPEC*N_POLS_PKT*N_POST_VACC+((k+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT+1,
-N_POLS_PKT,N_POST_VACC);
-			}*/
+        			(db_in->block[block_in].data[i*N_POST_CHANS_SPEC*N_POLS_PKT*N_POST_VACC*N_POST_CHANS_COMB+((k+1)*N_POST_CHANS_SPEC*N_POST_CHANS_COMB-(j+1)*N_POST_CHANS_COMB+l)*N_POLS_PKT]
+        			+db_in->block[block_in].data[i*N_POST_CHANS_SPEC*N_POLS_PKT*N_POST_VACC*N_POST_CHANS_COMB+((k+1)*N_POST_CHANS_SPEC*N_POST_CHANS_COMB-(j+1)*N_POST_CHANS_COMB+l)*N_POLS_PKT+1]);
+				/*if(i==0 | i==1){
+					printf("data.Polar1[%d] equal db_in->block[block_in].data[%d]+db_in->block[block_in].data[%d]/%d/%d/%d\n",
+i*N_POST_CHANS_SPEC+j,
+i*N_POST_CHANS_SPEC*N_POLS_PKT*N_POST_VACC*N_POST_CHANS_COMB+((k+1)*N_POST_CHANS_SPEC*N_POST_CHANS_COMB-(j+1)*N_POST_CHANS_COMB+l)*N_POLS_PKT,
+i*N_POST_CHANS_SPEC*N_POLS_PKT*N_POST_VACC*N_POST_CHANS_COMB+((k+1)*N_POST_CHANS_SPEC*N_POST_CHANS_COMB-(j+1)*N_POST_CHANS_COMB+l)*N_POLS_PKT+1,
+N_POLS_PKT,
+N_POST_VACC,
+N_POST_CHANS_COMB);
+					}*/
+
+				}
 			}
-			data.Polar1[i*N_CHANS_SPEC+j] = (uint8_t)(post_vacc_tmp/N_POLS_PKT/N_POST_VACC);	
-			//data.Polar1[i*N_CHANS_SPEC+j] = (uint8_t)((db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT]+db_in->block[block_in].data[((i+1)*N_CHANS_SPEC-j-1)*N_POLS_PKT+1])/N_POLS_PKT);	
+			data.Polar1[i*N_POST_CHANS_SPEC+j] = (uint8_t)(post_vacc_tmp/N_POLS_PKT/N_POST_VACC/N_POST_CHANS_COMB); //average after post vacc and channelization
         	}
         }
     }

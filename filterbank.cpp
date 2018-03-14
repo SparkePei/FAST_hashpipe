@@ -17,6 +17,7 @@
 #include <FAST_databuf.h>
 
 #define _CHAR_SWAP_SIZE 256
+#define F_OFF   (-0.125*N_POST_CHANS_COMB)
 
 //extern int beam_ID;
 
@@ -781,7 +782,7 @@ void FilterBankData::ZeroDM(const string method)
 	
 	double Fch1 = 1799.9375;
 	double Foff = -0.125;
-	int Nchans  = N_CHANS_SPEC;
+	int Nchans  = N_POST_CHANS_SPEC;
 	float Tsamp = 256e-6;//(s )
 	int Nbits   = N_BITS_DATA_POINT;
 	int Nifs=1;//N_POLS_PKT;
@@ -832,7 +833,7 @@ void FilterBankData::ZeroDM(const string method)
 	fil.Tsamp=SAMP_TIME*N_POST_VACC;
 	fil.Fch1=F_CH1;
 	fil.Foff=F_OFF;
-	fil.Nchans=N_CHANS_SPEC;
+	fil.Nchans=N_POST_CHANS_SPEC;
 	fil.Nbits=N_BITS_DATA_POINT;
 	fil.Nbeams=N_BEAM;
 	fil.Ibeam=beam_ID;
@@ -840,7 +841,7 @@ void FilterBankData::ZeroDM(const string method)
 	fil.RefDM=0;
 	//fil.Nsamples=Nsl/Nchans/Nifs;
 	//fil.pData=(float *)pd_proc;
-	//char outputname[N_CHANS_SPEC];
+	//char outputname[N_POST_CHANS_SPEC];
 	//sprintf(outputname, "%s.fil", fname);
 	//fil.WriteHeaderToFile(outputname);
 	fil.WriteHeaderToFile(fname);

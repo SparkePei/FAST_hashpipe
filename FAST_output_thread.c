@@ -24,7 +24,7 @@ extern double net_MJD;
 static void *run(hashpipe_thread_args_t * args)
 {
 	printf("\n%f Mbytes for each Filterbank file.\n ",float(N_BYTES_PER_FILE)/1024/1024);
-	printf("\n%d Channels per Buff.\n ",N_CHANS_BUFF/N_POST_VACC);
+	printf("\n%d Channels per Buff.\n ",N_CHANS_BUFF/N_POST_VACC/N_POST_CHANS_COMB);
 	// Local aliases to shorten access to args fields
 	// Our input buffer happens to be a FAST_ouput_databuf
 	FAST_output_databuf_t *db = (FAST_output_databuf_t *)args->ibuf;
@@ -106,7 +106,7 @@ static void *run(hashpipe_thread_args_t * args)
 	
                 fwrite(db->block[block_idx].data.Polar1,sizeof(db->block[block_idx].data.Polar1),1,FAST_file_Polar_1);
                 //fwrite(db->block[block_idx].data.Polar2,sizeof(db->block[block_idx].data.Polar2),1,FAST_file_Polar_2);
-		N_Bytes_save += BUFF_SIZE/N_POLS_PKT/N_POST_VACC;		
+		N_Bytes_save += BUFF_SIZE/N_POLS_PKT/N_POST_VACC/N_POST_CHANS_COMB;		
 	
 		if (TEST){
 

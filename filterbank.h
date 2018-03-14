@@ -19,7 +19,7 @@ using namespace std;
 #define SOURCE_NAME "frb_20180501"
 //#define T_SAMP 	256e-6 //(s ) 
 #define F_CH1 	1799.9375
-#define F_OFF	-0.125
+//#define F_OFF	(-0.125*N_POST_CHANS_COMB)
 //#define N_CHANS	N_CHANS_SPEC
 //#define N_BITS	N_BITS_DATA_POINT
 #define N_IFS	1 //N_POLS_PKT
