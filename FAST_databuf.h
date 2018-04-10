@@ -12,7 +12,7 @@
 
 #define N_BEAM			19
 #define N_POST_VACC		1			//number of post vaccumulation, how many spectrums added together
-#define N_POST_CHANS_COMB	4			//Number of post channels combining,how many channels added together
+#define N_POST_CHANS_COMB	1			//Number of post channels combining,how many channels added together
 #define N_CHAN_PER_PACK		2048			//Number of channels per packet
 #define N_PACKETS_PER_SPEC	2			//Number of packets per spectrum
 #define N_BYTES_DATA_POINT	1			//Number of bytes per datapoint
@@ -30,7 +30,8 @@
 //#define N_SPEC_PER_FILE		1199616/4 			// Number of spectrums per file \
 				int{time(s)/T_samp(s)/N_SPEC_BUFF}*N_SPEC_BUFF  e.g. 20s data: int(20/0.001/128)*128
 //#define N_BYTES_PER_FILE	(N_SPEC_PER_FILE * N_BYTES_PER_SPEC / N_POLS_PKT) 			// we can save (I,Q,U,V) polaration into disk. 
-#define SAMP_TIME		256e-6			// sec
+//#define SAMP_TIME		64e-6			// sec, when acc_len=8
+#define SAMP_TIME		256e-6			// sec, when acc_len=32
 #define FIL_LEN			20			// sec
 #define N_BYTES_PER_FILE	(FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC/N_POST_CHANS_COMB) 			// we can save (I,Q,U,V) polaration into disk. 
 
