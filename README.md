@@ -1,7 +1,7 @@
 # FAST_Pipeline_Hashpipe
 ### Introduction
     
-* This  code is used to receive the packets from high speed ethernet, calculate the Stokes parameters and save the data to disc in filterbank format.The data will be stored in a temporary place which mounted on CPU RAM. A FRB real time search software known as Heimdall will look for the new *.fil file in a given directory, once Heimdall found insterested signals the Filterbank files will be moved to disk, otherwise remove these raw data.<br>
+* This  code is used to receive the packets from high speed ethernet, calculate the Stokes parameters and save the data to disc in filterbank format.The data will be stored in a temporary place which mounted on CPU RAM. A FRB real time search software known as Heimdall will look for the new *.fil file in a given directory, once Heimdall found interested signals the Filterbank files will be moved to disk, otherwise remove these raw data.<br>
 * Three threads have developed to perform packet receiving, Stokes calculation and Filterbank data formatting, which are:
     * FAST_net_thread; (packet receving)
     * FAST_gpu_thread; (Stokes calculation,"gpu" is just a tradition name, no GPU used in here.)
@@ -40,3 +40,10 @@
     ```
     hashpipe_status_monitor.rb
     ```
+### Settings
+* Collapse data in time
+	set N_POST_VACC in FAST_databuf.h to perform post vaccumulation, add given number of spectrums together
+* Collapse data in spectrum
+	set N_POST_CHANS_COMB in FAST_databuf.h to combine given number of channels together, this value must be set to 2^n
+* Roaches concurrent data collection mechanism 
+	use Redis database to set a start flag, check the value of flag to start collecting data. 
