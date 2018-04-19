@@ -17,7 +17,7 @@
 #include <FAST_databuf.h>
 
 #define _CHAR_SWAP_SIZE 256
-#define F_OFF   (-0.125*N_POST_CHANS_COMB)
+//#define F_OFF   (-0.125*N_POST_CHANS_COMB)
 
 //extern int beam_ID;
 

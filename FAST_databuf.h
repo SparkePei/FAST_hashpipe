@@ -30,8 +30,18 @@
 //#define N_SPEC_PER_FILE		1199616/4 			// Number of spectrums per file \
 				int{time(s)/T_samp(s)/N_SPEC_BUFF}*N_SPEC_BUFF  e.g. 20s data: int(20/0.001/128)*128
 //#define N_BYTES_PER_FILE	(N_SPEC_PER_FILE * N_BYTES_PER_SPEC / N_POLS_PKT) 			// we can save (I,Q,U,V) polaration into disk. 
+
+/**************************** parameters for filterbank header ***********************/
 //#define SAMP_TIME		64e-6			// sec, when acc_len=8
-#define SAMP_TIME		256e-6			// sec, when acc_len=32
+#define CLOCK			1000			// MHz
+#define START_FREQ		1000			// MHz
+#define FFT_CHANS		4096			// MHz, number of FFT channels in ROACH2
+#define FREQ_RES		(CLOCK/2.0/FFT_CHANS)	// MHz
+#define F_OFF   		(-1*FREQ_RES*N_POST_CHANS_COMB) // MHz
+#define F_CH1   		(START_FREQ+CLOCK/2.0-FREQ_RES/2.0)	// 
+#define ACC_LEN			32			// accumulation length defined in ROACH2
+#define SAMP_TIME		(FFT_CHANS*2.0*ACC_LEN/CLOCK*1.0e-6)			// sec, when acc_len=32
+
 #define FIL_LEN			20			// sec
 #define N_BYTES_PER_FILE	(FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC/N_POST_CHANS_COMB) 			// we can save (I,Q,U,V) polaration into disk. 
 
