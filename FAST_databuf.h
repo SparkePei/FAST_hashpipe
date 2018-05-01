@@ -20,7 +20,7 @@
 #define N_BYTES_HEADER		8			//Number of Bytes of header
 #define N_SPEC_BUFF             (2*512*N_POST_VACC)		//Number of spectrums per buffer
 #define N_BITS_DATA_POINT       (N_BYTES_DATA_POINT*8) 	//Number of bits per datapoint in packet
-#define N_CHANS_SPEC		(N_CHAN_PER_PACK * N_PACKETS_PER_SPEC) 					//Channels in spectrum for 1 pole.
+#define N_CHANS_SPEC		(N_CHAN_PER_PACK * N_PACKETS_PER_SPEC) 					//Channels in spectrum for 1 pol.
 #define N_POST_CHANS_SPEC	(N_CHANS_SPEC/N_POST_CHANS_COMB) 					//number of channels after post channel merge, for filterbank file
 #define DATA_SIZE_PACK		(unsigned long)(N_CHAN_PER_PACK * N_POLS_PKT *  N_BYTES_DATA_POINT) 	//Packet size without Header 
 #define PKTSIZE			(DATA_SIZE_PACK + N_BYTES_HEADER)					//Total Packet size 
@@ -43,7 +43,7 @@
 #define SAMP_TIME		(FFT_CHANS*2.0*ACC_LEN/CLOCK*1.0e-6)			// sec, when acc_len=32
 
 #define FIL_LEN			20			// sec
-#define N_BYTES_PER_FILE	(FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC/N_POST_CHANS_COMB) 			// we can save (I,Q,U,V) polaration into disk. 
+#define N_BYTES_PER_FILE	(FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC/N_POST_CHANS_COMB) 			// only save (I+Q)/2 into disk. 
 
 
 

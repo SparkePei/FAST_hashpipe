@@ -305,11 +305,13 @@ static void *run(hashpipe_thread_args_t * args)
 	struct timeval currenttime;
     redisContext *redis_c;
     redisReply *reply;
-    const char *hostname = "asa2";
+
+    const char *redis_host = "asa2";
     int redis_port = 6379;
 
+
     struct timeval timeout = { 1, 500000 }; // 1.5 seconds
-    redis_c = redisConnectWithTimeout(hostname, redis_port, timeout);
+    redis_c = redisConnectWithTimeout(redis_host, redis_port, timeout);
     if (redis_c == NULL || redis_c->err) {
         if (redis_c) {
             printf("Connection error: %s\n", redis_c->errstr);
@@ -367,7 +369,11 @@ static void *run(hashpipe_thread_args_t * args)
     	reply = (redisReply *)redisCommand(redis_c,"GET start_flag");
 	sleep(0.1);
 	} while(strcmp(reply->str,"1")!=0); // if start_flag set to 1 then start data receiving.
-    	printf("GET value from %s and start_flag is: %s, start data receiving...\n", hostname, reply->str);
+	// wait until the integer time value changes.
+	time_t time0=time(&timep);
+	while(time(&timep)==time0);
+	// start to collect data.
+    	printf("GET value from %s and start_flag is: %s, start data receiving...\n", redis_host, reply->str);
     	freeReplyObject(reply);
 
     /* Set up UDP socket */
