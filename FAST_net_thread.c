@@ -18,6 +18,14 @@
 #include "hashpipe.h"
 #include "FAST_databuf.h"
 #include <hiredis/hiredis.h>
+// for multicasting
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+
+#include <sched.h>
 
 //#include "FAST_net_thread.h"
 //defining a struct of type hashpipe_udp_params as defined in hashpipe_udp.h
@@ -306,7 +314,7 @@ static void *run(hashpipe_thread_args_t * args)
     redisContext *redis_c;
     redisReply *reply;
 
-    const char *redis_host = "asa2";
+    const char *redis_host = "m21";
     int redis_port = 6379;
 
 
@@ -378,6 +386,37 @@ static void *run(hashpipe_thread_args_t * args)
 
     /* Set up UDP socket */
     int rv = hashpipe_udp_init(&up);
+    /* int optval = 1;
+    if (setsockopt(up.sock,SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
+        hashpipe_error("FAST_net_thread", "Error joining multicast group.");
+        pthread_exit(NULL);
+    } */
+    // turn bindhost into an IP address that we can use in bind()
+    char frb_group[32];
+    sprintf(frb_group, "239.1.0.1");
+    //int addrlen;
+    struct ip_mreq mreq;
+    //struct sockaddr_in addr;
+    //struct ifreq ifr;
+    //ifr.ifr_addr.sa_family = AF_INET;
+    //strncpy(ifr.ifr_name , up.bindhost , IFNAMSIZ-1);
+    //ioctl(up.sock, SIOCGIFADDR, &ifr);
+    //char * bindhost_addr = inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr);
+    //addr.sin_addr.s_addr = inet_addr(up.bindhost);
+    //addr.sin_port = htons(up.bindport);
+    //addrlen = sizeof(addr);
+
+    // join the associate socket to the multicast group
+    // IP_ADD_MEMBERSHIP causes IGMP group membership report to be sent
+    mreq.imr_multiaddr.s_addr = inet_addr(frb_group);
+    //mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+    // mreq.imr_interface.s_addr = inet_addr(up.bindhost);
+    mreq.imr_interface.s_addr = inet_addr("192.168.16.11");
+    if (setsockopt(up.sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
+        hashpipe_error("FAST_net_thread", "Error joining multicast group.");
+        pthread_exit(NULL);
+    }
+
 
     if (rv!=HASHPIPE_OK) {
         hashpipe_error("FAST_net_thread",
@@ -438,7 +477,8 @@ static void *run(hashpipe_thread_args_t * args)
         hputi8(st.buf, "NPACKETS", total_packets_counted);
         hashpipe_status_unlock_safe(&st);
 
-//	pkt_size = recv(up.sock, p.data, HASHPIPE_MAX_PACKET_SIZE, 0);
+
+
 	pkt_size = recvfrom(up.sock,packet,PKTSIZE*sizeof(char),0,NULL,NULL);	
 
 	if(!run_threads()) {break;}

@@ -46,4 +46,6 @@
 * Collapse data in spectrum
 	set N_POST_CHANS_COMB in FAST_databuf.h to combine given number of channels together, this value must be set to 2^n
 * Roaches concurrent data collection mechanism 
-	use Redis database to set a start flag, check the value of flag to start collecting data. 
+	use Redis database to set a start flag, check the value of flag to start collecting data.
+* Multicast network
+	set frb_group in FAST_net_thread.c to join the associate socket to the multicast group, currently this IP address is 192.168.16.11 and the multicast group is 239.1.0.1
