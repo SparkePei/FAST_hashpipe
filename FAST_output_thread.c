@@ -37,8 +37,16 @@ static void *run(hashpipe_thread_args_t * args)
 	uint64_t N_Bytes_file = N_BYTES_PER_FILE;
 	int filb_flag = 1;
 	FILE * FAST_file_Polar_1;
+	FILE * csv_file;
 	//FILE * FAST_file_Polar_2;
 	char f_fil_P1[250];
+	struct tm  *now;
+	time_t rawtime;
+	char P[4] = {'I','Q','U','V'};
+	char File_dir[] = "/mnt/fast_frb_data/B";
+	char t_stamp[50];
+	char csv_t_start[20], csv_t_end[20];
+	char csv_string[100];
 	//char f_fil_P2[250];
 
 	sleep(1);
@@ -72,12 +80,7 @@ static void *run(hashpipe_thread_args_t * args)
 		hputi4(st.buf, "OUTBLKIN", block_idx);
 		hashpipe_status_unlock_safe(&st);
 		if (filb_flag ==1 && start_file ==1 ){
-			struct tm  *now;
-			time_t rawtime;
-			char P[4] = {'I','Q','U','V'};
-			printf("\n\nopen new filterbank file...\n\n");
-			char File_dir[] = "/mnt/fast_frb_data/B";
-			char t_stamp[50];
+			printf("\nopen new filterbank file...\n");
 	        	time(&rawtime);
 			now = localtime(&rawtime);
 		        strftime(t_stamp,sizeof(t_stamp), "_%Y-%m-%d_%H-%M-%S.fil.working",now);
@@ -92,8 +95,9 @@ static void *run(hashpipe_thread_args_t * args)
 		//	}
 			
 			WriteHeader(f_fil_P1,net_MJD);
-			//WriteHeader(f_fil_P2);
-	
+			// open csv file
+			csv_file = fopen("./fastburst.csv","a+");
+			strftime(csv_t_start,sizeof(csv_t_start),"%Y-%m-%d_%H-%M-%S",now);
 			printf("write header done!\n");
 	
 			N_files += 1;
@@ -131,6 +135,19 @@ static void *run(hashpipe_thread_args_t * args)
 			//fclose(FAST_file_Polar_2);
                         //strncpy(Filname_P2, f_fil_P2, strlen(f_fil_P2)-8);
                         rename(f_fil_P1,Filname_P1);
+			// write filename, start time, end time, beam number to csv file
+	        	time(&rawtime);
+			now = localtime(&rawtime);
+			strftime(csv_t_end,sizeof(csv_t_end),"%Y-%m-%d_%H-%M-%S",now);
+			sprintf(csv_string,"%s\t%s\t%s\t%d\t\n",f_fil_P1,csv_t_start,csv_t_end,beam_ID);
+			fwrite(csv_string,sizeof(csv_string),1,csv_file);
+			// fwrite(f_fil_P1,sizeof(f_fil_P1),1,csv_file);
+			// fwrite(csv_t_start,sizeof(csv_t_start),1,csv_file);
+			// fwrite(csv_t_end,sizeof(csv_t_end),1,csv_file);
+			// char s_beam_ID[1];
+			// sprintf(s_beam_ID,"%d",beam_ID);
+			// fwrite(s_beam_ID,sizeof(s_beam_ID),1,csv_file);
+			fclose(csv_file);
                         //rename(f_fil_P2,Filname_P2);
 			}
 
