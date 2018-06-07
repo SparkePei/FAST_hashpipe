@@ -97,7 +97,7 @@ static void *run(hashpipe_thread_args_t * args)
 			WriteHeader(f_fil_P1,net_MJD);
 			// open csv file
 			csv_file = fopen("./fastburst.csv","a+");
-			strftime(csv_t_start,sizeof(csv_t_start),"%Y-%m-%d_%H-%M-%S",now);
+			strftime(csv_t_start,sizeof(csv_t_start),"%Y-%m-%d-%H:%M:%S",now);
 			printf("write header done!\n");
 	
 			N_files += 1;
@@ -138,8 +138,8 @@ static void *run(hashpipe_thread_args_t * args)
 			// write filename, start time, end time, beam number to csv file
 	        	time(&rawtime);
 			now = localtime(&rawtime);
-			strftime(csv_t_end,sizeof(csv_t_end),"%Y-%m-%d_%H-%M-%S",now);
-			sprintf(csv_string,"%s\t%s\t%s\t%d\t\n",f_fil_P1,csv_t_start,csv_t_end,beam_ID);
+			strftime(csv_t_end,sizeof(csv_t_end),"%Y-%m-%d-%H:%M:%S",now);
+			sprintf(csv_string,"%s%c%s%c%s%c%d\n",Filname_P1,',',csv_t_start,',',csv_t_end,',',beam_ID);
 			fwrite(csv_string,sizeof(csv_string),1,csv_file);
 			// fwrite(f_fil_P1,sizeof(f_fil_P1),1,csv_file);
 			// fwrite(csv_t_start,sizeof(csv_t_start),1,csv_file);
