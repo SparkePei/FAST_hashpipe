@@ -11,8 +11,8 @@
 #define TEST			0
 
 #define N_BEAM			19
-#define N_POST_VACC		1			//number of post vaccumulation, how many spectrums added together
-#define N_POST_CHANS_COMB	1			//Number of post channels combining,how many channels added together, this number must be set to 2^n
+#define N_POST_VACC		4			//number of post vaccumulation, how many spectrums added together
+#define N_POST_CHANS_COMB	2			//Number of post channels combining,how many channels added together, this number must be set to 2^n
 #define N_CHAN_PER_PACK		2048			//Number of channels per packet
 #define N_PACKETS_PER_SPEC	2			//Number of packets per spectrum
 #define N_BYTES_DATA_POINT	1			//Number of bytes per datapoint
@@ -39,7 +39,7 @@
 #define FREQ_RES		(CLOCK/2.0/FFT_CHANS)	// MHz
 #define F_OFF   		(-1*FREQ_RES*N_POST_CHANS_COMB) // MHz
 #define F_CH1   		(START_FREQ+CLOCK/2.0-FREQ_RES/2.0)	// 
-#define ACC_LEN			32			// accumulation length defined in ROACH2
+#define ACC_LEN			8			// accumulation length defined in ROACH2
 #define SAMP_TIME		(FFT_CHANS*2.0*ACC_LEN/CLOCK*1.0e-6)			// sec, when acc_len=32
 
 #define FIL_LEN			20			// sec
