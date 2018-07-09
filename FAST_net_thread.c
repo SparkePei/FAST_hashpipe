@@ -392,7 +392,8 @@ static void *run(hashpipe_thread_args_t * args)
     struct ip_mreq mreq;
     // join the associate socket to the multicast group
     mreq.imr_multiaddr.s_addr = inet_addr(frb_group);
-    mreq.imr_interface.s_addr = inet_addr("192.168.16.11");
+    //mreq.imr_interface.s_addr = inet_addr("192.168.16.11");
+    mreq.imr_interface.s_addr = inet_addr("192.168.1.127");
     if (setsockopt(up.sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
         hashpipe_error("FAST_net_thread", "Error joining multicast group.");
         pthread_exit(NULL);
