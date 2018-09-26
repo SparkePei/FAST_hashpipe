@@ -3,22 +3,20 @@
 #include <stdbool.h>
 #include "hashpipe.h"
 #include "hashpipe_databuf.h"
-
-
 #define CACHE_ALIGNMENT         64
 #define N_INPUT_BLOCKS          3 
 #define N_OUTPUT_BLOCKS         3
 #define TEST			0
-
 #define N_BEAM			19
-#define N_POST_VACC		4			//number of post vaccumulation, how many spectrums added together
-#define N_POST_CHANS_COMB	2			//Number of post channels combining,how many channels added together, this number must be set to 2^n
+#define N_POST_VACC		5			//number of post vaccumulation, how many spectrums added together
+#define N_POST_CHANS_COMB	1			//Number of post channels combining,how many channels added together, this number must be set to 2^n
 #define N_CHAN_PER_PACK		2048			//Number of channels per packet
 #define N_PACKETS_PER_SPEC	2			//Number of packets per spectrum
 #define N_BYTES_DATA_POINT	1			//Number of bytes per datapoint
 #define N_POLS_PKT		2			//Number of polarizations per packet
 #define N_BYTES_HEADER		8			//Number of Bytes of header
 #define N_SPEC_BUFF             (2*512*N_POST_VACC)		//Number of spectrums per buffer
+//#define N_SPEC_BUFF             (2048*N_POST_VACC)		//Number of spectrums per buffer
 #define N_BITS_DATA_POINT       (N_BYTES_DATA_POINT*8) 	//Number of bits per datapoint in packet
 #define N_CHANS_SPEC		(N_CHAN_PER_PACK * N_PACKETS_PER_SPEC) 					//Channels in spectrum for 1 pol.
 #define N_POST_CHANS_SPEC	(N_CHANS_SPEC/N_POST_CHANS_COMB) 					//number of channels after post channel merge, for filterbank file
@@ -37,13 +35,14 @@
 #define START_FREQ		1000			// MHz
 #define FFT_CHANS		4096			// MHz, number of FFT channels in ROACH2
 #define FREQ_RES		(CLOCK/2.0/FFT_CHANS)	// MHz
-#define F_OFF   		(-1*FREQ_RES*N_POST_CHANS_COMB) // MHz
+#define F_OFF   		((-1)*FREQ_RES*N_POST_CHANS_COMB) // MHz
 #define F_CH1   		(START_FREQ+CLOCK/2.0-FREQ_RES/2.0)	// 
-#define ACC_LEN			8			// accumulation length defined in ROACH2
-#define SAMP_TIME		(FFT_CHANS*2.0*ACC_LEN/CLOCK*1.0e-6)			// sec, when acc_len=32
+//#define F_CH1   		(START_FREQ+FREQ_RES/2.0)	// 
+//#define ACC_LEN			24			// accumulation length defined in ROACH2
+//#define SAMP_TIME		(FFT_CHANS*2.0*ACC_LEN/CLOCK*1.0e-6)			// sec, when acc_len=32
 
-#define FIL_LEN			20			// sec
-#define N_BYTES_PER_FILE	(FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC/N_POST_CHANS_COMB) 			// only save (I+Q)/2 into disk. 
+//#define FIL_LEN			2			// sec
+//#define N_BYTES_PER_FILE	(FIL_LEN/SAMP_TIME/N_POST_VACC*N_CHANS_SPEC/N_POST_CHANS_COMB) 			// only save (I+Q)/2 into disk. 
 
 
 

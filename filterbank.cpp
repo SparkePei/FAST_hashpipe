@@ -20,6 +20,7 @@
 //#define F_OFF   (-0.125*N_POST_CHANS_COMB)
 
 //extern int beam_ID;
+extern double samp_time;
 
 TimeSeries::TimeSeries(void)
 {
@@ -830,7 +831,7 @@ void FilterBankData::ZeroDM(const string method)
 	//fil.Nbits=Nbits;
 	//fil.Nbeams=N_BEAM;
 	//fil.Nifs=Nifs;
-	fil.Tsamp=SAMP_TIME*N_POST_VACC;
+	fil.Tsamp=samp_time*N_POST_VACC;
 	fil.Fch1=F_CH1;
 	fil.Foff=F_OFF;
 	fil.Nchans=N_POST_CHANS_SPEC;
